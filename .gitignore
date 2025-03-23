@@ -5,6 +5,7 @@ __pycache__/
 
 # Віртуальне середовище
 venv/
+.venv/
 env/
 *.egg-info/
 *.egg

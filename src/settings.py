@@ -3,11 +3,15 @@ import os
 import sys
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
+import locale
+locale.setlocale(locale.LC_ALL, "uk_UA.UTF-8")
 
 
 # Load .env
 load_dotenv()
 
+DB_NAME = os.environ["DB_NAME"]
+INIT_DB = os.environ["INIT_DB"]
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 WEATHER_API_URL = os.environ["WEATHER_API_URL"]
 WEATHER_API_KEY = os.environ["WEATHER_API_KEY"]

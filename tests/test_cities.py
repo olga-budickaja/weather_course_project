@@ -4,10 +4,12 @@ import pandas as pd
 from src.database.utils import get_local_names, get_cities_data
 from src.constants import PATH_CITIES_LIST_XLSX
 
+
 @pytest.fixture(scope="module")
 def cities_df():
     """Readed Excel file and returned the cities list."""
     return pd.read_excel(PATH_CITIES_LIST_XLSX).to_dict(orient="records")
+
 
 @pytest.mark.asyncio(loop_scope="module")
 async def test_get_local_names():
@@ -18,7 +20,10 @@ async def test_get_local_names():
     assert result is not None, "The function must return data"
     assert "uk" in result, "Missing Ukrainian name"
     assert "en" in result, "Missing English name"
-    assert isinstance(result["uk"], str) and isinstance(result["en"], str), "Names must be strings"
+    assert isinstance(result["uk"], str) and isinstance(
+        result["en"], str
+    ), "Names must be strings"
+
 
 @pytest.mark.asyncio(loop_scope="module")
 async def test_get_cities_data(cities_df):
@@ -30,5 +35,9 @@ async def test_get_cities_data(cities_df):
 
     for city in results:
         assert "name_uk" in city and "name_en" in city, "Missing local names"
-        assert city["name_uk"] is None or isinstance(city["name_uk"], str), "name_uk must be str or None"
-        assert city["name_en"] is None or isinstance(city["name_en"], str), "name_en must be str or None"
+        assert city["name_uk"] is None or isinstance(
+            city["name_uk"], str
+        ), "name_uk must be str or None"
+        assert city["name_en"] is None or isinstance(
+            city["name_en"], str
+        ), "name_en must be str or None"

@@ -1,16 +1,21 @@
 import asyncio
+import functools
+from gettext import find
 from typing import Dict, Optional
 import aiohttp
+import aiosqlite
 import pandas as pd
 
 from constants import PATH_CITIES_LIST_XLSX
-from settings import WEATHER_API_KEY, WEATHER_API_URL
+from settings import DB_NAME, WEATHER_API_KEY, WEATHER_API_URL
 from settings import logger
+from database.queries import FIND_CITY_BY_START_NAME_EN, FIND_CITY_BY_START_NAME_UK
 
 # Get cities_list from
 df = pd.read_excel(PATH_CITIES_LIST_XLSX)
 
 cities_data = df.to_dict(orient="records")
+
 
 async def get_local_names(session, lat: float, lon: float) -> Optional[Dict[str, str]]:
     """
@@ -33,10 +38,15 @@ async def get_local_names(session, lat: float, lon: float) -> Optional[Dict[str,
                 data = await response.json()
                 if data and isinstance(data, list) and "local_names" in data[0]:
                     local_names = data[0]["local_names"]
-                    return {key: local_names[key] for key in ("uk", "en") if key in local_names}
+                    return {
+                        key: local_names[key]
+                        for key in ("uk", "en")
+                        if key in local_names
+                    }
             return None
     except Exception as e:
         logger.error(e)
+
 
 async def get_cities_data():
     """
@@ -44,7 +54,9 @@ async def get_cities_data():
     and added their in cities_list.
     """
     async with aiohttp.ClientSession() as session:
-        tasks = [get_local_names(session, city["lat"], city["lon"]) for city in cities_data]
+        tasks = [
+            get_local_names(session, city["lat"], city["lon"]) for city in cities_data
+        ]
         results = await asyncio.gather(*tasks)
 
         for city, local_names in zip(cities_data, results):
@@ -57,4 +69,25 @@ async def get_cities_data():
 
         return cities_data
 
+
 cities_list = asyncio.run(get_cities_data())
+
+async def get_city_by_first_letters(start_name:str, uk=True):
+    '''
+    Gets the name of the city from the first 3 letters.
+
+    :param start_name: the first 3 letters of the city name (string)
+    :param uk: which language checked in app (boolean), if the user checked Urranian: uk == True, else: uk == False
+    :return:
+    '''
+    logger.info("Getting city name")
+    async with aiosqlite.connect(DB_NAME) as db:
+        query = FIND_CITY_BY_START_NAME_UK if uk==True else FIND_CITY_BY_START_NAME_EN
+        try:
+            async with db.execute(query, (f"%{start_name}%", )) as cursor:
+                data = await cursor.fetchall()
+                logger.info("Data getted successfully:")
+                logger.info(data)
+                return data
+        except Exception as e:
+            logger.error(e)
