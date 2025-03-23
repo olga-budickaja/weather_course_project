@@ -1,9 +1,10 @@
+import locale
 import logging
 import os
 import sys
-from dotenv import load_dotenv
+
 from aiogram import Bot, Dispatcher
-import locale
+from dotenv import load_dotenv
 
 locale.setlocale(locale.LC_ALL, "uk_UA.UTF-8")
 

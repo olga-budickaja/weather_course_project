@@ -1,8 +1,7 @@
-import pytest
 import aiosqlite
+import pytest
 
 from src.database.utils import get_city_by_first_letters
-
 
 DB_NAME = "test_db.sqlite"
 
@@ -12,8 +11,13 @@ async def setup_database():
     """Creates a test database with a table of cities."""
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute(
-            "CREATE TABLE IF NOT EXISTS cities (id INTEGER PRIMARY KEY, name_uk TEXT, name_en TEXT)"
+            "CREATE TABLE IF NOT EXISTS cities ("
+            "id INTEGER PRIMARY KEY, "
+            "name_uk TEXT, "
+            "name_en TEXT"
+            ");"
         )
+
         await db.executemany(
             "INSERT INTO cities (name_uk, name_en) VALUES (?, ?)",
             [

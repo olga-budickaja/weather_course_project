@@ -1,12 +1,11 @@
 import asyncio
 
 import database.data as db
+from bot import *
 
 # import database.actions as da
 from database.data import get_city_by_first_letters
-from bot import *
 from settings import BOT, INIT_DB, dp
-
 
 cities = []
 

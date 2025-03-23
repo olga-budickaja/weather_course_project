@@ -1,14 +1,13 @@
-import bot.keyboards as kb
-
-from settings import dp
 from aiogram.filters import Command
-from aiogram.types import Message
-from bot.states import *
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
 
+import bot.keyboards as kb
 from bot.messages.texts import get_text
-from database.data import get_user_by_id
+from bot.states import *
 from bot.utils import add_user, choise_language
+from database.data import get_user_by_id
+from settings import dp
 
 
 @dp.message(Command("start"))

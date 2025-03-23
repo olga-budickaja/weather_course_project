@@ -1,8 +1,9 @@
-import pytest
 import aiohttp
 import pandas as pd
-from src.database.utils import get_local_names, get_cities_data
+import pytest
+
 from src.constants import PATH_CITIES_LIST_XLSX
+from src.database.utils import get_cities_data, get_local_names
 
 
 @pytest.fixture(scope="module")

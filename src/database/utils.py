@@ -1,15 +1,11 @@
 import asyncio
-import functools
-from gettext import find
 from typing import Dict, Optional
+
 import aiohttp
-import aiosqlite
 import pandas as pd
 
 from constants import PATH_CITIES_LIST_XLSX
-from settings import DB_NAME, WEATHER_API_KEY, WEATHER_API_URL
-from settings import logger
-from database.queries import FIND_CITY_BY_START_NAME_EN, FIND_CITY_BY_START_NAME_UK
+from settings import WEATHER_API_KEY, WEATHER_API_URL, logger
 
 # Get cities_list from
 df = pd.read_excel(PATH_CITIES_LIST_XLSX)
@@ -26,7 +22,10 @@ async def get_local_names(session, lat: float, lon: float) -> Optional[Dict[str,
     :param lon: Longitude of the place
     :return: Dictionary with local city names or None if the query fails
     """
-    url = f"{WEATHER_API_URL}geo/1.0/reverse?lat={lat}&lon={lon}&limit=1&appid={WEATHER_API_KEY}"
+    url = (
+        f"{WEATHER_API_URL}geo/1.0/reverse?"
+        f"lat={lat}&lon={lon}&limit=1&appid={WEATHER_API_KEY}"
+    )
     logger.info(f"Request to {url} started")
 
     try:

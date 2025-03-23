@@ -1,12 +1,12 @@
-from bot.states import *
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-import bot.keyboards as kb
-from settings import logger
-from database.actions import insert_user
+import bot.keyboards.user as kb
 from bot.messages.texts import get_text
+from bot.states import *
+from database.actions import insert_user
 from database.data import get_user_by_id
+from settings import logger
 
 
 async def add_user(message: Message, state: FSMContext) -> None:
@@ -38,9 +38,10 @@ async def choise_language(message: Message, state: FSMContext) -> None:
     :param state: FSMContext for handling user state transitions.
     """
     logger.info(
-        f"Received /start command from user {message.from_user.id} with message: {message.text}"
+        f"Received /start command from user"
+        f" {message.from_user.id} with message: {message.text}"
     )
     await state.set_state(OnbordingUserState.select_language)
     await message.answer(
-        get_text(message, 1, "hello"), reply_markup=kb.user.select_language
+        get_text(message, 1, "hello"), reply_markup=kb.select_language
     )

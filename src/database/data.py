@@ -1,4 +1,5 @@
 import functools
+
 import aiosqlite
 
 from database.queries import *
@@ -60,12 +61,14 @@ async def get_city_by_first_letters(start_name: str, uk=True):
     Gets the name of the city from the first 3 letters.
 
     :param start_name: the first 3 letters of the city name (string)
-    :param uk: which language checked in app (boolean), if the user checked Urranian: uk == True, else: uk == False
+    :param uk: which language checked in app (boolean),
+    if the user checked Urranian: uk == True, else: uk == False
     :return:
     """
     logger.info("Getting city name")
     async with aiosqlite.connect(DB_NAME) as db:
-        query = FIND_CITY_BY_START_NAME_UK if uk == True else FIND_CITY_BY_START_NAME_EN
+        query = FIND_CITY_BY_START_NAME_UK if uk else FIND_CITY_BY_START_NAME_EN
+
         try:
             async with db.execute(query, (f"%{start_name}%",)) as cursor:
                 data = await cursor.fetchall()

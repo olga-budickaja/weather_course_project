@@ -6,21 +6,24 @@ repos:
         args: ["--line-length=88"]
 
   - repo: https://github.com/PyCQA/isort
-    rev: 6.0.1  
+    rev: 6.0.1
     hooks:
       - id: isort
-        args: ["--profile=black"]  
+        args: ["--profile=black"]
   - repo: https://github.com/PyCQA/flake8
     rev: 7.1.2
     hooks:
       - id: flake8
-        args: 
+        args:
           - "--max-line-length=88"
-          - "--ignore=E203,W503"   
+          - "--ignore=E203,W503,F401,F403,F405,W391"
           - "--exclude=venv,migrations"
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.6 
+    rev: v0.1.6
     hooks:
       - id: ruff
-        args: ["--fix"]  # Automatically fixes linting issues
+        args:
+          - "--ignore=E203,F401,F403,F405"
+          - "--exclude=venv,migrations"
+          - "--fix"

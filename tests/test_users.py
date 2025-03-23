@@ -1,5 +1,5 @@
-import pytest
 import aiosqlite
+import pytest
 
 from src.database.actions import insert_user
 from src.database.queries import CREATE_USERS_TABLE

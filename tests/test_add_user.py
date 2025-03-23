@@ -1,7 +1,6 @@
-import pytest
 import aiosqlite
+import pytest
 
-from src.bot.utils import add_user
 from src.database.actions import insert_user
 from src.database.queries import CREATE_USERS_TABLE
 from src.settings import DB_NAME
