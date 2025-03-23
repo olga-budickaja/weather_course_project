@@ -4,6 +4,7 @@ import sys
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 import locale
+
 locale.setlocale(locale.LC_ALL, "uk_UA.UTF-8")
 
 
@@ -36,6 +37,7 @@ file_handler_database.setFormatter(database_formatter)
 logger.addHandler(console_handler_database)
 logger.addHandler(file_handler_database)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+
 try:
     BOT = Bot(BOT_TOKEN)
     dp = Dispatcher()

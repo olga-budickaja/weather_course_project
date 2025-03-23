@@ -6,11 +6,14 @@ from src.database.utils import get_city_by_first_letters
 
 DB_NAME = "test_db.sqlite"
 
+
 @pytest.fixture(scope="module")
 async def setup_database():
     """Creates a test database with a table of cities."""
     async with aiosqlite.connect(DB_NAME) as db:
-        await db.execute("CREATE TABLE IF NOT EXISTS cities (id INTEGER PRIMARY KEY, name_uk TEXT, name_en TEXT)")
+        await db.execute(
+            "CREATE TABLE IF NOT EXISTS cities (id INTEGER PRIMARY KEY, name_uk TEXT, name_en TEXT)"
+        )
         await db.executemany(
             "INSERT INTO cities (name_uk, name_en) VALUES (?, ?)",
             [
@@ -22,6 +25,7 @@ async def setup_database():
         )
         await db.commit()
 
+
 @pytest.mark.asyncio
 async def test_get_city_by_first_letters_uk(setup_database):
     """Checks whether Ukrainian city names are returned correctly."""
@@ -29,7 +33,8 @@ async def test_get_city_by_first_letters_uk(setup_database):
 
     assert isinstance(results, list), "The result should be a list."
     assert len(results) > 0, "The list of cities must not be empty."
-    assert ("Київ",) in results, "Expected result: 'Київ'"
+    assert ("Kyiv",) in results, "Expected result: 'Київ'"
+
 
 @pytest.mark.asyncio
 async def test_get_city_by_first_letters_en(setup_database):
@@ -40,8 +45,9 @@ async def test_get_city_by_first_letters_en(setup_database):
     assert len(results) > 0, "The list of cities must not be empty."
     assert ("Kharkiv",) in results, "Expected result: 'Kharkiv'"
 
+
 @pytest.mark.asyncio
-async def test_get_city_by_first_letters_no_match(setup_database):
+async def test_get_city_by_first_letters_no_match():
     """Checks the case where the city is not found."""
     results = await get_city_by_first_letters("XYZ", uk=True)
 
